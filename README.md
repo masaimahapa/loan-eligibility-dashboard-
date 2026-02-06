@@ -1,73 +1,99 @@
-# React + TypeScript + Vite
+# Loan Eligibility Simulator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Production-grade frontend take-home submission for the **Frontend Project #2: Loan Eligibility Simulator** brief.
 
-Currently, two official plugins are available:
+## What this project delivers
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Responsive React + TypeScript UI for capturing applicant and loan inputs.
+- Mocked API layer aligned to the provided endpoint specification:
+  - `POST /api/loans/eligibility`
+  - `GET /api/loans/products`
+  - `POST /api/loans/calculate-rate`
+  - `GET /api/loans/validation-rules`
+- Validation rules and product-specific constraints (amount/term/purpose).
+- Simulated eligibility decisioning with affordability and risk outputs.
+- Repayment schedule table (first 6 months shown).
+- Automated unit tests for finance calculations and validation logic.
+- Production Docker image (multi-stage build + nginx static serving).
 
-## React Compiler
+## Tech stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 18
+- TypeScript
+- Vite
+- styled-components
+- Vitest + Testing Library
+- ESLint + Prettier
+- Docker + Nginx
 
-## Expanding the ESLint configuration
+## Run locally
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 1. Install dependencies
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Start development server
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
+
+Default URL: `http://localhost:5173`
+
+## Build and test
+
+### Run tests
+
+```bash
+npm test
+```
+
+### Build production assets
+
+```bash
+npm run build
+```
+
+### Preview production build
+
+```bash
+npm run preview
+```
+
+## Docker
+
+### Build image
+
+```bash
+docker build -t loan-eligibility-simulator .
+```
+
+### Run container
+
+```bash
+docker run --rm -p 8080:80 loan-eligibility-simulator
+```
+
+App URL: `http://localhost:8080`
+
+Health endpoint: `http://localhost:8080/health`
+
+## Project structure
+
+```text
+src/
+  api/                # Mock endpoint data + service functions
+  components/         # UI components (FormField, ResultsPanel)
+  hooks/              # Custom hooks (useEligibilityForm)
+  lib/                # Validation and finance logic
+  __tests__/          # Unit + component tests
+  styles/             # Styled-components definitions
+```
+
+## Notes on assessment scope
+
+- This submission uses mocked endpoint behavior (no backend), matching the brief’s mocked-data expectation.
+- Business logic is intentionally isolated (`src/lib`) for easier migration to real APIs.
+
